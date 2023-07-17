@@ -12,6 +12,8 @@ from sklear.preprocessing import OneHotEncoder,StandardScaler
 from src.exception import CustomException 
 from src.logger import logging 
 
+from src.utils import save_object
+
 @dataclass
 class DataTransformationConfig: 
     preprocessor_obj_file_path=os.path.join('artifacts',"preprocessor.pkl")
@@ -96,7 +98,7 @@ class DataTransformation:
             )
 
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
-            input_feature_test_arr=preprocessing_obj.transform(input_feature_train_df)
+            input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
             train_arr = np.c_[
                 input_feature_train_arr, np.array(target_feature_train_df)
@@ -116,5 +118,5 @@ class DataTransformation:
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
 
-        except:
-            pass 
+        except Exception as e:
+            raise CustomException(e,sys) 
